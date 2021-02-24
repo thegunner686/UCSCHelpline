@@ -9,18 +9,26 @@ class AuthStore extends EventEmitter {
         super();
 
         this.user = null;
+        this.newUser = false;
         this.signIn = this.signIn.bind(this);
         this.signOut = this.signOut.bind(this);
+        this.newUserGuideComplete = this.newUserGuideComplete.bind(this);
+    }
+    
+    hasUser() {
+        return this.user != null;
     }
 
-    getState() {
-        return {
-            user: this.user
-        };
+    getUser() {
+        return this.user;
+    }
+
+    isNewUser() {
+        return this.newUser;
     }
 
     async signIn() {
-
+        // checks to make sure we aren't logging in someone that's already logged in
         let isUserEqual = (googleUser, firebaseUser) => {
             if (firebaseUser) {
                 var providerData = firebaseUser.providerData;
@@ -37,10 +45,16 @@ class AuthStore extends EventEmitter {
 
         isUserEqual = isUserEqual.bind(this);
 
+        // takes the google user and then authenticates the credentials with firebase
         let onSignIn = (googleUser) => {
             let unsubscribe = firebase.auth().onAuthStateChanged((firebaseUser) => {
                 unsubscribe();
                 this.user = firebaseUser;
+                if(this.user) {
+                    console.log(this.user);
+                    this.emit("SignInSuccess");
+                    return;
+                }
                 if(!isUserEqual(googleUser, firebaseUser)) {
                     let credential = firebase.auth.GoogleAuthProvider.credential(
                         googleUser.idToken,
@@ -48,6 +62,12 @@ class AuthStore extends EventEmitter {
                     );
                     
                     firebase.auth().signInWithCredential(credential).then((user) => {
+                        // at this stage we're all authenticated 
+                        if(user.additionalUserInfo.isNewUser) {
+                            this.newUser = true;
+                        } else {
+                            this.newUser = false;
+                        }
                         this.user = user;
                         this.emit("SignInSuccess");
                     }).catch((error) => {
@@ -75,7 +95,31 @@ class AuthStore extends EventEmitter {
 
     signOut() {
         firebase.auth().signOut();
+        this.user = null;
+        this.newUser = false;
         this.emit("SignOut");
+    }
+
+    newUserGuideComplete() {
+        this.newUser = false;
+        this.emit("NewUserGuideComplete");
+    }
+
+    persistenceSignIn() {
+        return new Promise((resolve, reject) => {
+            let listener = firebase.auth().onAuthStateChanged((user) => {
+                listener();
+                console.log(user);
+                if(user) {
+                    this.newUser = false;
+                    this.user = user;
+                    resolve();
+                } else {
+                    this.user = null;
+                    reject();
+                }
+            })
+        });
     }
 
     handleDispatch(payload) {
@@ -85,6 +129,9 @@ class AuthStore extends EventEmitter {
                 break;
             case ActionTypes.Auth.SignOut:
                 this.signOut();
+                break;
+            case ActionTypes.Auth.NewUserGuideComplete:
+                this.newUserGuideComplete();
                 break;
             default:
                 break;

@@ -1,6 +1,7 @@
 export default {
     Auth: {
         SignIn: "AuthSignIn",
-        SignOut: "AuthSignOut"
+        SignOut: "AuthSignOut",
+        NewUserGuideComplete: "AuthNewUserGuideComplete"
     }
 }

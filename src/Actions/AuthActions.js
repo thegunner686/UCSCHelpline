@@ -12,3 +12,9 @@ export function SignOut() {
         type: ActionTypes.Auth.SignOut
     });
 }
+
+export function NewUserGuideComplete() {
+    dispatcher.dispatch({
+        type: ActionTypes.Auth.NewUserGuideComplete
+    });
+}

@@ -6,13 +6,13 @@ import {
     SafeAreaView,
     View,
     Text,
-    Image,
     Dimensions,
     StyleSheet
 } from "react-native"
 
 import {
-    Button
+    Button,
+    Image
 } from "react-native-elements";
 
 import * as AuthActions from "../Actions/AuthActions";
@@ -22,26 +22,6 @@ export default class EntryScreen extends Component {
     constructor() {
         super();
 
-        this.signInSuccess = this.signInSuccess.bind(this);
-        this.signInError = this.signInError.bind(this);
-    }
-
-    componentDidMount() {
-        AuthStore.addListener("SignInSuccess", this.signInSuccess);
-        AuthStore.addListener("SignInError", this.signInError);
-    }
-
-    componentWillUnmount() {
-        AuthStore.removeListener("SignInSuccess", this.signInSuccess);
-        AuthStore.removeListener("SignInError", this.signInError);
-    }
-
-    signInSuccess() {
-        
-    }
-
-    signInError() {
-        console.log("error");
     }
 
     render() {
@@ -71,12 +51,6 @@ export default class EntryScreen extends Component {
                         />}
                         iconLeft
                     />
-                    {/* <Button
-                        title="Log in"
-                        buttonStyle={styles.logInButton}
-                        titleStyle={styles.logInButtonTitle}
-                        type="clear"
-                    /> */}
                 </View>
             </SafeAreaView>
         )
