@@ -75,6 +75,14 @@ export default class GuideReportScreen extends Component {
                         onPress={() => { 
                             AuthActions.NewUserGuideComplete();
                         }}
+                        icon={
+                            <Icon
+                                name="rocket-launch"
+                                type="material-community"
+                                color="white"
+                                style={{ marginRight: 5 }}
+                            />
+                        }
                     />
                 </View>
             </SafeAreaView>
@@ -140,13 +148,13 @@ let styles = StyleSheet.create({
     nextButtonContainer: {
     },
     nextButton: {
-        backgroundColor: Colors.darkBlue,
+        backgroundColor: Colors.dark,
         width: width / 4 * 3,
         borderRadius: width
     },
     nextButtonTitle: {
         color: "white",
-        fontFamily: Fonts.headerFont,
-        fontSize: Fonts.headerSize,
+        fontFamily: Fonts.standardFont,
+        fontSize: Fonts.standardSize,
     }
 });

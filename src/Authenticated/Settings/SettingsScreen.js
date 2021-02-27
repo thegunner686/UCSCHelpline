@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 
-import { Colors } from "../styles";
+import { Colors } from "../../styles";
 
-import * as AuthActions from "../Actions/AuthActions";
-import ActionTypes from "../ActionTypes";
+import * as AuthActions from "../../Actions/AuthActions";
+import ActionTypes from "../../ActionTypes";
 
 import {
     SafeAreaView,
@@ -17,7 +17,7 @@ import {
     Button
 } from "react-native-elements";
 
-export default class HomeScreen extends Component {
+export default class SettingsScreen extends Component {
     constructor() {
         super();
     }
@@ -25,7 +25,7 @@ export default class HomeScreen extends Component {
     render() {
         return (
             <SafeAreaView style={styles.container}>
-                <Text>home</Text>
+                <Text>settings</Text>
                 <Button
                     onPress={() => {
                         AuthActions.SignOut();
@@ -37,8 +37,15 @@ export default class HomeScreen extends Component {
     }
 }
 
+let { width, height } = Dimensions.get("window");
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: Colors.cream
+        backgroundColor: Colors.cream,
+        width,
+        height,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center"
     }
 })

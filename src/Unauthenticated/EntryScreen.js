@@ -16,12 +16,34 @@ import {
 } from "react-native-elements";
 
 import * as AuthActions from "../Actions/AuthActions";
-import AuthStore from "../Stores/AuthStore";
+import authStore from "../Stores/AuthStore";
 
 export default class EntryScreen extends Component {
     constructor() {
         super();
 
+        this.state = {
+            disabled: false,
+        }
+
+        this.signingIn = this.signingIn.bind(this);
+    }
+
+    componentDidMount() {
+        authStore.addListener("SigningIn", this.signingIn);
+    }
+
+    componentWillUnmount() {
+        authStore.removeListener("SigningIn", this.signingIn);
+        this.setState({
+            disabled: false,
+        });
+    }
+
+    signingIn() {
+        this.setState({
+            disabled: true,
+        });
     }
 
     render() {
@@ -31,8 +53,9 @@ export default class EntryScreen extends Component {
                     <Image 
                         style={styles.logo}
                         source={require("../../assets/ucsc_logo.png")}
+                        placeholderStyle={{backgroundColor: Colors.cream, borderRadius: width}}
                     />
-                    <Text style={styles.title}>SlugLine</Text>
+                    <Text style={styles.title}>HelpLine</Text>
                     <Text style={styles.tagline}>Your personal guide to UC Santa Cruz.</Text>
                 </View>
                 <View style={styles.buttonsContainer}>
@@ -48,7 +71,9 @@ export default class EntryScreen extends Component {
                         icon={<Image
                             style={{width: 30, height: 30,marginRight: 10}}
                             source={require("../../assets/uc_seal.png")}
+                            placeholderStyle={{backgroundColor: Colors.darkBlue, borderRadius: width}}
                         />}
+                        disabled={this.state.disabled}
                         iconLeft
                     />
                 </View>

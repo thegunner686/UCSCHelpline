@@ -72,12 +72,13 @@ export default class GuideNavigationScreen extends Component {
                         onPress={() => { this.props.navigation.navigate("GuideSolve")}}
                         icon={
                             <Icon
-                                name="arrowright"
-                                type="ant-design"
+                                name="chevron-right"
+                                type="material-community"
                                 color="white"
                             />
                         }
                         iconRight
+                        
                     />
                 </View>
             </SafeAreaView>
@@ -143,13 +144,13 @@ let styles = StyleSheet.create({
     nextButtonContainer: {
     },
     nextButton: {
-        backgroundColor: Colors.darkBlue,
+        backgroundColor: Colors.dark,
         width: width / 4 * 3,
         borderRadius: width
     },
     nextButtonTitle: {
         color: "white",
-        fontFamily: Fonts.headerFont,
-        fontSize: Fonts.headerSize,
+        fontFamily: Fonts.standardFont,
+        fontSize: Fonts.standardSize,
     }
 });

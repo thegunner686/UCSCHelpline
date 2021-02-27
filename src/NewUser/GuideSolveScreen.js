@@ -40,8 +40,7 @@ export default class GuideSolveScreen extends Component {
                         Use the Solve tab to ask a student leader how to solve a problem
                         you're having on campus or get answers to questions you have. This
                         could range from anything like, "What classes should I take for my major",
-                        or to "How can I utilize campus resources like CARE?". We'll discuss the
-                        difference between Solve and Report next.
+                        or to "How can I utilize campus resources like CARE?".
                     </Text>
                 </View>
                 <View style={styles.progressBar}>
@@ -74,8 +73,8 @@ export default class GuideSolveScreen extends Component {
                         onPress={() => { this.props.navigation.navigate("GuideReport")}}
                         icon={
                             <Icon
-                                name="arrowright"
-                                type="ant-design"
+                                name="chevron-right"
+                                type="material-community"
                                 color="white"
                             />
                         }
@@ -145,13 +144,13 @@ let styles = StyleSheet.create({
     nextButtonContainer: {
     },
     nextButton: {
-        backgroundColor: Colors.darkBlue,
+        backgroundColor: Colors.dark,
         width: width / 4 * 3,
         borderRadius: width
     },
     nextButtonTitle: {
         color: "white",
-        fontFamily: Fonts.headerFont,
-        fontSize: Fonts.headerSize,
+        fontFamily: Fonts.standardFont,
+        fontSize: Fonts.standardSize,
     }
 });

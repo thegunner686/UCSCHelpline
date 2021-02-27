@@ -27,11 +27,12 @@ export default class GettingStartedScreen extends Component {
                         resizeMethod="auto"
                         resizeMode="contain"
                         style={styles.logo}
-                        source={require("../../assets/uc_seal.png")}
+                        source={require("../../assets/ucsc_logo.png")}
+                        placeholderStyle={{ backgroundColor: Colors.cream }}
                     />
                 </View>
                 <View style={styles.textContainer}>
-                    <Text style={styles.header}>Welcome to SlugLine!</Text>
+                    <Text style={styles.header}>Welcome to HelpLine!</Text>
                     <Text style={styles.standard}>Here's a getting started guide on your personal guide to UC Santa Cruz.</Text>
                 </View>
                 <View style={{flex: 1}}></View>
@@ -46,7 +47,7 @@ export default class GettingStartedScreen extends Component {
                                 name="rocket"
                                 type="entypo"
                                 reverse
-                                color={Colors.darkBlue}
+                                color={Colors.dark}
                                 size={30}
                             />
                         }
