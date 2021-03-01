@@ -29,6 +29,7 @@ class AuthStore extends EventEmitter {
         this.attachIntentListener = this.attachIntentListener.bind(this);
         this.uploadProfilePicture = this.uploadProfilePicture.bind(this);
         this.updateProfileInformation = this.updateProfileInformation.bind(this);
+        this.getIntent = this.getIntent.bind(this);
     }
 
     authenticated() {
@@ -66,7 +67,7 @@ class AuthStore extends EventEmitter {
     }
 
     async uploadProfilePicture(uri) {
-        let { uid } = this.user;
+        let { uid } = this.firebaseUser;
         let res = await fetch(uri);
         let blob = await res.blob();
 
@@ -161,6 +162,10 @@ class AuthStore extends EventEmitter {
 
     getUserIntents() {
         return this.user_intents;
+    }
+
+    getIntent(ref) {
+        return this.user_intents[ref];
     }
 
     resolveIntent(category, ref, resolve_val) {

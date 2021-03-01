@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
     title: {
         fontFamily: Fonts.headerFont,
         fontSize: Fonts.standardSize,
-        color: Colors.darkBlue,
+        color: Colors.darkBlue
     },
     input: {
         fontFamily: Fonts.standardFont,
@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
     button: {
         width: width / 4 * 3,
         borderRadius: width,
-        backgroundColor: Colors.darkBlue,
+        backgroundColor: Colors.dark,
     },
     buttonTitle: {
         fontFamily: Fonts.standardFont,

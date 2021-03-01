@@ -7,6 +7,7 @@ import {
     Dimensions,
     StyleSheet,
     ScrollView,
+    RefreshControl
 } from "react-native";
 
 import {
@@ -27,9 +28,11 @@ export default class UserIntentScreen extends Component {
 
         this.state = {
             sending: false,
+            refreshing: false,
         }
 
         this.toggleResolved = this.toggleResolved.bind(this);
+        this.onRefresh = this.onRefresh.bind(this);
     }
 
     componentDidMount() {
@@ -59,9 +62,27 @@ export default class UserIntentScreen extends Component {
         })
     }
 
+    onRefresh() {
+        this.setState({
+            refreshing: true,
+            sending: true,
+        });
+
+        let { ref } = this.state;
+
+        setTimeout(() => {
+            let intent = authStore.getIntent(ref);
+            this.setState({
+                ...intent,
+                refreshing: false,
+                sending: false
+            });
+        }, 1000)
+    }
+
     render() {
         let { photoURL, displayName, email, content, response, category, 
-              time_created, anonymous, title, responder, assigned, resolved } = this.state;
+              time_created, anonymous, title, responder, assigned, resolved, refreshing } = this.state;
 
         let { iconName, iconType } = getIconForCategory(category);
         return (
@@ -87,11 +108,12 @@ export default class UserIntentScreen extends Component {
                     />
                     <Text style={{
                         fontFamily: Fonts.headerFont,
-                        fontSize: Fonts.titleSize / 2
+                        fontSize: Fonts.titleSize / 2,
+                        textAlign: "center",
+                        color: Colors.dark
                     }}>
                         {title}
                     </Text>
-                    <Text>{formattedDateFromMilli(time_created)}</Text>
                     {resolved ?
                         <Text style={[styles.status, { color: Colors.darkGreen }]}>Resolved</Text>
                         :
@@ -100,6 +122,10 @@ export default class UserIntentScreen extends Component {
                             :
                             <Text style={[styles.status, { color: Colors.darkRed }]}>Not Assigned</Text>
                     }
+                    <Text style={{
+                        fontFamily: Fonts.standardFont,
+                        fontSize: Fonts.tinySize
+                    }}>{formattedDateFromMilli(time_created)}</Text>
                     <View style={{
                         width,
                         display: "flex",
@@ -126,6 +152,10 @@ export default class UserIntentScreen extends Component {
                         padding: 10,
                     }}
                 >
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={this.onRefresh}
+                    />
                     <View style={styles.messageContainer}>
                         {
                                 anonymous ?

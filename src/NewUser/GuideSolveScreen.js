@@ -35,12 +35,11 @@ export default class GuideSolveScreen extends Component {
                     />
                 </View>
                 <View style={styles.textContainer}>
-                    <Text style={styles.header}>Solve & Get Answers</Text>
+                    <Text style={styles.header}>Solve Problems & Get Answers</Text>
                     <Text style={styles.standard}>
-                        Use the Solve tab to ask a student leader how to solve a problem
-                        you're having on campus or get answers to questions you have. This
-                        could range from anything like, "What classes should I take for my major",
-                        or to "How can I utilize campus resources like CARE?".
+                        With the "+ Slugline Message" button at the bottom of the main screen, you can open up our messaging service.
+                        This will take you to a page where you can write questions to student leaders or tell them about
+                        problems you're facing on campus, and they'll get back to you with solutions!
                     </Text>
                 </View>
                 <View style={styles.progressBar}>

@@ -39,10 +39,10 @@ export default class GuideReportScreen extends Component {
                 <View style={styles.textContainer}>
                     <Text style={styles.header}>Report Issues</Text>
                     <Text style={styles.standard}>
-                        Use the Report tab to send a message to student leaders about an issue
-                        you're encountering on campus. This could be anything from "My enrollment
-                        is on hold" to "There's a broken light outside my dorm building" or more
-                        serious issues like Title IX offenses.
+                        With the same "+ Slugline Message" button, you can make a Report. Simply
+                        tap on the "Mark this as a Report" button on the top of the page you're writing your message, 
+                        and that will signal to our student leaders that critical steps may need to be taken to
+                        resolve this issue.
                     </Text>
                 </View>
                 <View style={styles.progressBar}>

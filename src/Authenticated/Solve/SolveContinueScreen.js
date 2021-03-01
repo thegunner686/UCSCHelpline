@@ -178,7 +178,7 @@ export default class SolveContinueScreen extends Component {
                             padding: 5
                         }}
                         inputContainerStyle={[styles.inputContainerStyle, {
-                            backgroundColor: this.state.anonymous ? Colors.darkBrown : Colors.lightBrown
+                            backgroundColor: this.state.anonymous ? Colors.brown : Colors.lightBrown
                         } ]}
                         leftIcon={
                             <Icon
@@ -203,7 +203,7 @@ export default class SolveContinueScreen extends Component {
                             padding: 5
                         }}
                         inputContainerStyle={[styles.inputContainerStyle, {
-                            backgroundColor: this.state.anonymous ? Colors.darkBrown : Colors.lightBrown
+                            backgroundColor: this.state.anonymous ? Colors.brown : Colors.lightBrown
                         } ]}
                         maxLength={1000}
                         leftIcon={

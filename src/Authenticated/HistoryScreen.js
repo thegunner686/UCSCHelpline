@@ -264,7 +264,7 @@ export default class HistoryScreen extends Component {
                         fontFamily: Fonts.standardFont,
                         fontSize: Fonts.headerSize,
                         marginTop: height / 5
-                    }}>You have no Helpline History.</Text>
+                    }}>You have no Slugline History.</Text>
                     :
                     <ScrollView contentContainerStyle={styles.scrollView}>
                     {

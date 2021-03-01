@@ -32,7 +32,7 @@ export default class GettingStartedScreen extends Component {
                     />
                 </View>
                 <View style={styles.textContainer}>
-                    <Text style={styles.header}>Welcome to HelpLine!</Text>
+                    <Text style={styles.header}>Welcome to Slugline!</Text>
                     <Text style={styles.standard}>Here's a getting started guide on your personal guide to UC Santa Cruz.</Text>
                 </View>
                 <View style={{flex: 1}}></View>

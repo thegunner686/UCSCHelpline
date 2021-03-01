@@ -55,7 +55,7 @@ export default class EntryScreen extends Component {
                         source={require("../../assets/ucsc_logo.png")}
                         placeholderStyle={{backgroundColor: Colors.cream, borderRadius: width}}
                     />
-                    <Text style={styles.title}>HelpLine</Text>
+                    <Text style={styles.title}>Slugline</Text>
                     <Text style={styles.tagline}>Your personal guide to UC Santa Cruz.</Text>
                 </View>
                 <View style={styles.buttonsContainer}>

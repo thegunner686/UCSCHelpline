@@ -35,25 +35,6 @@ import EntryScreen from "./Unauthenticated/EntryScreen";
 
 // Authenticated
 
-// Navigate
-import NavigateScreen from "./Authenticated/Navigate/NavigateScreen";
-
-// Report
-import ReportBugScreen from "./Authenticated/ReportBugScreen";
-
-// Solve
-import SolveScreen from "./Authenticated/Solve/SolveScreen";
-import SolveContinueScreen from "./Authenticated/Solve/SolveContinueScreen";
-
-// Profile
-import ProfileScreen from "./Authenticated/ProfileScreen";
-
-// Help
-import HelpScreen from "./Authenticated/HelpScreen"
-
-// History
-import HistoryScreen from "./Authenticated/HistoryScreen"
-import UserIntentScreen from "./Authenticated/UserIntentScreen"
 
 // New User
 import GettingStartedScreen from "./NewUser/GettingStartedScreen";
@@ -69,6 +50,8 @@ import SolveStack from "./Routes/SolveStack";
 // Stores
 import authStore from "./Stores/AuthStore";
 import { Colors, Fonts } from "./styles";
+
+import { BackButtonIcon } from "./Routes/HeaderBar"
 
 let { width, height } = Dimensions.get("window")
 
@@ -224,7 +207,13 @@ class Main extends Component {
                                             },
                                             headerTransparent: true,
                                             headerTitle: "",
-                                            headerBackTitle: "Navigate"
+                                            headerBackTitleStyle: {
+                                                fontFamily: Fonts.standardFont,
+                                                fontSize: Fonts.headerSize,
+                                                color: Colors.dark,
+                                            },
+                                            headerBackTitleVisible: false,
+                                            headerBackImage: (props) => <BackButtonIcon {...props}/>
                                         }}
                                     />
                                     <Stack.Screen
@@ -238,7 +227,13 @@ class Main extends Component {
                                             },
                                             headerTransparent: true,
                                             headerTitle: "",
-                                            headerBackTitle: "Solve"
+                                            headerBackTitleStyle: {
+                                                fontFamily: Fonts.standardFont,
+                                                fontSize: Fonts.headerSize,
+                                                color: Colors.dark,
+                                            },
+                                            headerBackTitleVisible: false,
+                                            headerBackImage: (props) => <BackButtonIcon {...props}/>
                                         }}
                                     />
                                 </Stack.Navigator>

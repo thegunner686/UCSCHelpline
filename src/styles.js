@@ -2,6 +2,7 @@ const Colors = {
     purple: "#6200ee",
     cream: "#F3F0E6",
     lightBrown: "#E6E3D6",
+    brown: "#979385",
     darkBrown: "#3A2F00",
     //cream: "#fbf1d8",
     darkCream: "#fbf1d8",

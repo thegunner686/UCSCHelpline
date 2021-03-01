@@ -215,7 +215,7 @@ export default class ProfileScreen extends Component {
                             justifyContent: "flex-end",
                             alignItems: "center"
                         }}>
-                            { this.state.editing ?
+                            { this.state.editing || this.state.loading ?
                                 <Button 
                                     type="clear"
                                     titleStyle={{
@@ -226,6 +226,7 @@ export default class ProfileScreen extends Component {
                                     title="Upload Picture"
                                     onPress={this.pickImage}
                                     disabled={this.state.loading}
+                                    loading={this.state.loading}
                                 />
                                 :
                                 null

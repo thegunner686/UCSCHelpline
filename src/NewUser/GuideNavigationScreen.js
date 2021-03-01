@@ -37,9 +37,9 @@ export default class GuideNavigationScreen extends Component {
                 <View style={styles.textContainer}>
                     <Text style={styles.header}>Navigate Around Campus</Text>
                     <Text style={styles.standard}>
-                        Use the Navigate tab to look up any building, classroom, or key point on campus. 
-                        And if you can't find what you're looking for, you can always get in touch with a student
-                        leader who will help direct you to where you want to go.
+                        Use the navigation tool, courtesy of maps.ucsc.edu, to lookup locations around campus! 
+                        Simply search for what you're looking for, either by typing it in or moving around the map, 
+                        and click on a location. An information box will slide up with a link to directions in Google Maps!
                     </Text>
                 </View>
                 <View style={styles.progressBar}>
