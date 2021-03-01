@@ -72,8 +72,11 @@ export default class UserIntentScreen extends Component {
                     padding: 10,
                     display: "flex",
                     flexDirection: "column",
-                    alignItems: "flex-start",
-                    justifyContent: "flex-start"
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderBottomWidth: 1,
+                    borderBottomColor: "white",
+                    backgroundColor: Colors.cream
                 }}>
 
                     <Icon
@@ -110,14 +113,12 @@ export default class UserIntentScreen extends Component {
                             titleStyle={{
                                 fontFamily: Fonts.standardFont,
                                 fontSize: Fonts.standardSize,
-                                color: resolved ? Colors.darkRed : Colors.darkGreen
+                                color: resolved ? Colors.red : Colors.green
                             }}
                             onPress={this.toggleResolved}
                             disabled={this.state.sending}
                         />
                     </View>
-
-                    <Divider style={{ height: 10, backgroundColor: Colors.red }} />
                 </View>
                 <ScrollView
                     contentContainerStyle={{
@@ -172,7 +173,12 @@ export default class UserIntentScreen extends Component {
                                     textAlignVertical="top"
                                     multiline={true}
                                     inputStyle={styles.content}
-                                    inputContainerStyle={styles.responderContainer}
+                                    inputContainerStyle={[styles.responderContainer,
+                                        {
+                                            borderWidth: 1,
+                                            borderColor: Colors.lightBrown
+                                        }
+                                    ]}
                                     label={responder}
                                     labelStyle={styles.label}
                                     value={response}
@@ -195,7 +201,7 @@ export default class UserIntentScreen extends Component {
 let { width, height } = Dimensions.get("window");
 let styles = StyleSheet.create({
     container: {
-        backgroundColor: Colors.cream,
+        backgroundColor: "white",
         width,
         height,
         display: "flex",
@@ -222,7 +228,6 @@ let styles = StyleSheet.create({
         width: width / 10 * 8.5,
     },
     responderContainer: {
-        borderBottomWidth: 0, 
         backgroundColor: "white",
         borderRadius: 10,
         padding: 5,

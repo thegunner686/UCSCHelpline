@@ -54,7 +54,8 @@ export default class NavigateScreen extends Component {
                     />
                 </View>
                 <Button
-                    title=" Helpline Message"
+                    
+                    title=" Slugline Message"
                     type="solid"
                     titleStyle={{
                         fontFamily: Fonts.standardFont,
@@ -78,6 +79,7 @@ export default class NavigateScreen extends Component {
                     onPress={() => {
                         this.props.navigation.navigate("SolveStack")
                     }}
+                    raised
                 />
             </SafeAreaView>
         )

@@ -153,6 +153,28 @@ export default class ReportStack extends Component {
             <Stack.Screen
                 name={route_name + "Profile"}
                 component={ProfileScreen}
+                options={{
+                    headerStyle: {
+                        backgroundColor: Colors.cream
+                    },
+                    headerTitleStyle: {
+                        fontFamily: Fonts.standardFont,
+                        fontSize: Fonts.standardSize,
+                        color: Colors.darkBlue
+                    },
+                    headerBackTitleVisible: false,
+                    headerTitle: "",
+                    headerBackImage: () => <BackButtonIcon route_name={route_name} {...this.props} />,
+                    headerRight: () => (
+                        <RightBar 
+                            route_name={route_name}
+                            {...this.props}
+                            hideHelp={true}
+                            hideBug={true}
+                            hideProfile={true}
+                        />
+                    )
+                }}
             />
         </Stack.Navigator>
         )

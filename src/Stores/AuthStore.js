@@ -27,6 +27,8 @@ class AuthStore extends EventEmitter {
         this.submitUserIntent = this.submitUserIntent.bind(this);
         this.updateIntents = this.updateIntents.bind(this);
         this.attachIntentListener = this.attachIntentListener.bind(this);
+        this.uploadProfilePicture = this.uploadProfilePicture.bind(this);
+        this.updateProfileInformation = this.updateProfileInformation.bind(this);
     }
 
     authenticated() {
@@ -45,8 +47,38 @@ class AuthStore extends EventEmitter {
         return this.newUser;
     }
 
+    async updateProfileInformation(info) {
+        let { uid } = this.firebaseUser;
+
+        try {
+            await firebase.firestore().collection("Users").doc(uid).update({
+                ...info
+            });
+            return "Success"
+        } catch(e) {
+            console.log(e);
+            return "Failure"
+        }
+    }
+
     getProfilePicture() {
         return this.firebaseUser ? this.firebaseUser.photoURL : this.photoURL;
+    }
+
+    async uploadProfilePicture(uri) {
+        let { uid } = this.user;
+        let res = await fetch(uri);
+        let blob = await res.blob();
+
+        let ref = firebase.storage().ref("ProfilePictures").child(uid);
+
+        let storage_res = await ref.put(blob);
+        let url = await ref.getDownloadURL();
+
+        await firebase.firestore().collection("Users").doc(uid).update({
+            photoURL: url,
+        });
+
     }
 
     async submitUserIntent(title, content, category, anonymous) {

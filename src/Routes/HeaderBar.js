@@ -62,7 +62,7 @@ export class LeftBar extends Component {
                         fontFamily: Fonts.headerFont,
                         fontSize: Fonts.standardSize,
                         color: Colors.darkBlue
-                    }}>Helpline </Text>
+                    }}>Slugline</Text>
                     <Text style={{
                         fontFamily: Fonts.standardFont,
                         fontSize: Fonts.tinySize,

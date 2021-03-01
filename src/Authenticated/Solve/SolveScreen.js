@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
     button: {
         width: width / 4 * 3,
         borderRadius: width,
-        backgroundColor: Colors.dark,
+        backgroundColor: Colors.darkBlue,
     },
     buttonTitle: {
         fontFamily: Fonts.standardFont,
