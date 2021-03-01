@@ -49,7 +49,7 @@ class AuthStore extends EventEmitter {
         return this.firebaseUser ? this.firebaseUser.photoURL : this.photoURL;
     }
 
-    async submitUserIntent(content, category, anonymous) {
+    async submitUserIntent(title, content, category, anonymous) {
         return new Promise((resolve, reject) => {
             this.emit("UserIntent");
             if(!this.authenticated() || !this.hasUser()) {
@@ -63,9 +63,6 @@ class AuthStore extends EventEmitter {
                 reject("Improper category, must be of: NavigationIntent, SolveIntent, ReportIntent, DebugIntent, HelpIntent");
                 return;
             }
-
-            console.log("SUBMIT USER INTENT")
-            console.log(category);
 
             let ref = firebase.firestore().collection(category).doc().id;
 
@@ -88,6 +85,7 @@ class AuthStore extends EventEmitter {
                 photoURL: !anonymous && photoURL ? photoURL : anon_slug_photo_url,
                 displayName: anonymous ? anon_slug_name : displayName,
                 email,
+                title,
                 content,
                 category,
                 anonymous: anonymous ? true : false,
@@ -99,15 +97,12 @@ class AuthStore extends EventEmitter {
                 response: null,
             };
 
-            console.log("SUBMIT USER INTENT")
-            console.log(category);
-
             firebase.firestore().collection(category).doc(ref).set(intent).then((res) => {
                 firebase.firestore().collection("Users").doc(uid).update({
                     num_intents: firebase.firestore.FieldValue.increment(1),
-                    intents: firebase.firestore.FieldValue.arrayUnion({ 
-                        ref, 
-                        category 
+                    intents: firebase.firestore.FieldValue.arrayUnion({
+                        ref,
+                        category
                     })
                 }).then((res) => {
                     this.emit("UserIntentSubmitted");
@@ -121,14 +116,55 @@ class AuthStore extends EventEmitter {
         });
     }
 
+    getNumChangedUserIntents() {
+        return this.changed_user_intents.length;
+    }
+
     getChangedUserIntents() {
         let intents = this.changed_user_intents;
         this.changed_user_intents = [];
+        this.emit("ChangedUserIntentsFlushed");
         return intents;
     }
 
     getUserIntents() {
         return this.user_intents;
+    }
+
+    resolveIntent(category, ref, resolve_val) {
+        return new Promise((resolve, reject) => {
+            firebase.firestore().collection(category).doc(ref).update({
+                resolved: resolve_val
+            }).then((res) => {
+                resolve(resolve_val);
+            }).catch((error) => {
+                reject(error);
+            })
+        });
+    }
+
+    deleteIntent(category, ref) {
+        let { uid } = this.firebaseUser;
+        return new Promise((resolve, reject) => {
+            firebase.firestore().collection(category).doc(ref).delete().then((res) => {
+                firebase.firestore().collection("Users").doc(uid).update({
+                    num_intents: firebase.firestore.FieldValue.increment(-1),
+                    intents: firebase.firestore.FieldValue.arrayRemove({
+                        ref,
+                        category
+                    })
+                }).then((res) => {
+                    if(this.user_intent_listeners[ref]) {
+                        this.user_intent_listeners[ref]();
+                    }
+                    resolve();
+                }).catch((error) => {
+                    reject(error);
+                })
+            }).catch((error) => {
+                reject(error);
+            })
+        });
     }
 
     updateIntents() {
@@ -142,8 +178,6 @@ class AuthStore extends EventEmitter {
         }
 
         intents.forEach((intent) => {
-            console.log("UPDATE INTENTS")
-            console.log(intent);
             if(!this.user_intents[intent.ref]) {
                 this.user_intents[intent.ref] = intent;
                 this.attachIntentListener(intent);
@@ -152,13 +186,15 @@ class AuthStore extends EventEmitter {
     }
 
     attachIntentListener(intent) {
-        console.log("ATTACH LISTENER INTENTS")
-
-        console.log(intent);
-        console.log("after")
-        
         let listener = firebase.firestore().collection(intent.category).doc(intent.ref).onSnapshot((snapshot) => {
             let data = snapshot.data();
+            if(data == undefined || data == null) {
+                this.user_intents[intent.ref] = null;
+                delete this.user_intents[intent.ref];
+                this.emit("UserIntentChange");
+                return;
+            }
+
             if(!deepEqual(this.user_intents[intent.ref], data)) {
                 this.user_intents[intent.ref] = data;
                 this.changed_user_intents.push(data);
@@ -175,6 +211,10 @@ class AuthStore extends EventEmitter {
             ref = db.collection("Users").doc(uid);
         this.deactivateUserListener = ref.onSnapshot(snapshot => {
             let data = snapshot.data();
+            if(data == null) {
+                this.signOut();
+                return;
+            }
             if(this.firebaseUser == null || !deepEqual(data, this.firebaseUser)) {
                 this.firebaseUser = data;
                 this.updateIntents();
@@ -321,12 +361,17 @@ class AuthStore extends EventEmitter {
         this.firebaseUser = null;
         this.newUser = false;
         if(this.deactivateUserListener) {
-            this.deactivateListener();
+            this.deactivateUserListener();
         }
         Object.entries(this.user_intent_listeners).forEach((listener) => {
-            listener();
+            listener[1]();
         });
-        
+        this.user_intent_listeners = {};
+        this.user_intents = {};
+        this.changed_user_intents = [];
+        this.newUser = false;
+        this.deactivateUserListener = null;
+        this.photoURL = "";
         this.emit("SignOut");
     }
 

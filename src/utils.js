@@ -21,3 +21,41 @@ export function deepEqual(object1, object2) {
 export function isObject(object) {
     return object != null && typeof object === 'object';
 }
+
+export function formattedDateFromMilli(milli) {
+    return (new Date(milli)).toLocaleString()
+}
+
+export function getIconForCategory(category) {
+    let iconName = "", iconType = "";
+    switch(category) {
+        case "NavigateIntent":
+            iconName = "map-marked-alt";
+            iconType = "font-awesome-5";
+            break;
+        case "SolveIntent":
+            iconName = "account-search";
+            iconType = "material-community";
+            break;
+        case "ReportIntent":
+            iconName = "report";
+            iconType = "material";
+            break;
+        case "DebugIntent":
+            iconName = "bug-outline";
+            iconType = "material-community";
+            break;
+        case "HelpIntent":
+            iconName = "help";
+            iconType = "entypo";
+            break;
+        default:
+            iconName = "error"
+            iconType="material"
+            break;
+    }
+    return {
+        iconName,
+        iconType
+    };
+}

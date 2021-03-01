@@ -1,6 +1,8 @@
 const Colors = {
     purple: "#6200ee",
     cream: "#F3F0E6",
+    lightBrown: "#E6E3D6",
+    darkBrown: "#3A2F00",
     //cream: "#fbf1d8",
     darkCream: "#fbf1d8",
     darkDarkCream: "#dbba6e",
@@ -24,7 +26,8 @@ const Fonts = {
     titleFont: "HelveticaNeue-MediumItalic",
     titleSize: 50,
     standardFont: "HelveticaNeue-Light",
-    standardSize: 14
+    standardSize: 14,
+    tinySize: 10,
 }
 
 export { Colors, Fonts };

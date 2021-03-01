@@ -19,7 +19,8 @@ import {
 import {
     Button,
     Input,
-    Icon
+    Icon,
+    CheckBox
 } from "react-native-elements";
 
 import authStore from "../../Stores/AuthStore"
@@ -30,13 +31,18 @@ export default class SolveScreen extends Component {
 
         this.state = {
             input: "",
+            title: "",
+            category: "SolveIntent",
             disabled: false,
         }
 
         this.inputChange = this.inputChange.bind(this);
+        this.titleChange = this.titleChange.bind(this);
         this.continue = this.continue.bind(this);
+        this.toggleCategory = this.toggleCategory.bind(this);
 
         this.inputRef = React.createRef();
+        this.titleRef = React.createRef();
     }
 
     inputChange(value) {
@@ -45,17 +51,36 @@ export default class SolveScreen extends Component {
         });
     }
 
+    titleChange(value) {
+        this.setState({
+            title: value
+        })
+    }
+
     continue() {
-        let { input, disabled } = this.state;
-        if(disabled || input.trim() == "") {
+        let { input, title, category, disabled } = this.state,
+            nogo = false;
+
+        if(title.trim() == "") {
+            this.titleRef.current.shake();
+            nogo = true;
+        }
+        if(input.trim() == "") {
             this.inputRef.current.shake();
+            nogo = true;
+        }
+
+        if(disabled || nogo) {
             return;
         }
+        
         this.setState({
             disabled: true,
         });
         let { email, displayName, photoURL } = authStore.getUser();
         this.props.navigation.navigate("SolveContinue", {
+            category,
+            title,
             input,
             email,
             displayName,
@@ -66,17 +91,47 @@ export default class SolveScreen extends Component {
         });
     }
 
+    toggleCategory() {
+        let { category } = this.state;
+        let new_category = "";
+
+        if(category == "SolveIntent") {
+            new_category = "ReportIntent"
+        } else {
+            new_category = "SolveIntent"
+        }
+
+        this.setState({
+            category: new_category
+        });
+    }
+
     render() {
+        let { category } = this.state;
         return (
             <SafeAreaView style={styles.container}>
-                <View style={{flex:1}}></View>
                 <View style={styles.imageContainer}>
                 <Icon
-                        name="account-search"
-                        type="material-community"
-                        color={Colors.darkYellow}
-                        size={width / 4}
-                        style={styles.icon}
+                    name={category == "SolveIntent" ? "account-search" : "report"}
+                    type={category == "SolveIntent" ? "material-community" : "material"}
+                    color={Colors.darkYellow}
+                    size={width / 5}
+                    style={styles.icon}
+                />
+                <CheckBox
+                        title="Mark this as a Report"
+                        checked={category == "ReportIntent"}
+                        onPress={this.toggleCategory}
+                        iconType="antdesign"
+                        checkedColor={Colors.yellow}
+                        checkedIcon="checkcircle"
+                        uncheckedIcon="checkcircleo"
+                        containerStyle={{ 
+                            backgroundColor: Colors.cream, 
+                            borderRadius: width,
+                            borderWidth: 0,
+                        }}
+                        center
                     />
                 </View>
                 <KeyboardAvoidingView 
@@ -84,33 +139,108 @@ export default class SolveScreen extends Component {
                     style={styles.inputContainer}
                 >
                     <Input
-                        ref={this.inputRef}
+                        ref={this.titleRef}
                         textAlignVertical="top"
-                        returnKeyType="done"
+                        returnKeyType="next"
                         blurOnSubmit={true}
                         autoFocus
-                        label="Describe your problem or question below."
+                        label={category == "SolveIntent" ? "Give your problem or question a title." : "Give your report a title."}
                         labelStyle={{
                             color: Colors.dark,
                             fontFamily: Fonts.standardFont,
                             fontSize: Fonts.standardSize,
+                            paddingBottom: 5,
                         }}
-                        
-                        placeholder="Tell us what's going on!"
+                        inputContainerStyle={styles.inputContainerStyle}
+                        clearButtonMode="while-editing"
+                        placeholder={category == "SolveIntent" ? "I haven't seen any banana slugs." : "Banana slugs have infiltrated my dorm."}
+                        onEndEditing={() => {
+                            this.inputRef.current.focus()
+                        }}
+                        inputStyle={styles.title}
+                        maxLength={100}
+                        leftIcon={
+                            <Icon
+                                name="rename-box"
+                                type="material-community"
+                                size={16}
+                            />
+                        }
+                        onChangeText={this.titleChange}
+                        value={this.state.title}
+                        disabled={this.state.disabled}
+                    />
+                    <Input
+                        ref={this.inputRef}
+                        textAlignVertical="top"
+                        returnKeyType="done"
+                        blurOnSubmit={true}
+                        label={category == "SolveIntent" ? "Describe it below." : "Provide details below."}
+                        labelStyle={{
+                            color: Colors.dark,
+                            fontFamily: Fonts.standardFont,
+                            fontSize: Fonts.standardSize,
+                            paddingBottom: 5,
+                        }}
+                        inputContainerStyle={styles.inputContainerStyle}
+                        placeholder={category == "SolveIntent" ? "Tell us what's going on!" : "The banana slugs are doing what?!"}
                         multiline={true}
                         inputStyle={styles.input}
                         maxLength={1000}
                         leftIcon={
                             <Icon
-                                name="typewriter"
+                                name="text-subject"
                                 type="material-community"
+                                size={16}
                             />
                         }
+                        leftIconContainerStyle={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "flex-start"
+                        }}
                         onChangeText={this.inputChange}
                         value={this.state.input}
                         disabled={this.state.disabled}
                     />
-
+                    <View style={{
+                        flex: 1,
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "flex-start",
+                        justifyContent: "flex-end",
+                        width,
+                    }}>
+                        { this.state.input && this.state.input.trim() != "" ?
+                            <Button
+                                title="Clear"
+                                buttonStyle={{
+                                    backgroundColor: "transparent",
+                                    width: width / 4.5,
+                                }}
+                                titleStyle={{
+                                    color: Colors.dark,
+                                    fontFamily: Fonts.standardFont,
+                                    fontSize: Fonts.standardSize
+                                }}
+                                icon={() => (
+                                    <Icon
+                                        name="close-circle"
+                                        type="material-community"
+                                        color={Colors.dark}
+                                        size={16}
+                                    />
+                                )}
+                                onPress={() => {
+                                    this.setState({
+                                        input: ""
+                                    })
+                                }}
+                            />
+                            :
+                            null
+                        }
+                    </View>
                 <Button 
                     containerStyle={styles.buttonContainer}
                     buttonStyle={styles.button}
@@ -127,6 +257,7 @@ export default class SolveScreen extends Component {
                     }
                     iconRight
                 />
+                <View style={{flex:1}}></View>
                 </KeyboardAvoidingView>
                 <View style={{flex: 1}}></View>
             </SafeAreaView>
@@ -150,7 +281,7 @@ const styles = StyleSheet.create({
         width,
         display: "flex",
         alignItems: "center",
-        justifyContent: "flex-end",
+        justifyContent: "center",
     },
     inputContainer: {
         flex: 3,
@@ -159,13 +290,24 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "space-between",
     },
-    input: {
-        fontFamily: Fonts.standardFont,
-        fontSize: Fonts.headerSize,
+    inputContainerStyle: {
+        backgroundColor: "white",
+        borderRadius: 10,
+        borderBottomWidth: 0,
+        padding: 5
+    },
+    title: {
+        fontFamily: Fonts.headerFont,
+        fontSize: Fonts.standardSize,
         color: Colors.darkBlue,
     },
+    input: {
+        fontFamily: Fonts.standardFont,
+        fontSize: Fonts.standardSize,
+        color: Colors.darkBlue
+    },
     buttonContainer: {
-        marginBottom: height / 20,
+        marginBottom: height / 10,
     },
     button: {
         width: width / 4 * 3,

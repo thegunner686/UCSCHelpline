@@ -5,6 +5,8 @@ import { Colors, Fonts } from "../../styles";
 import * as AuthActions from "../../Actions/AuthActions";
 import ActionTypes from "../../ActionTypes";
 
+import { NavigationActions } from "@react-navigation/native"
+
 import {
     SafeAreaView,
     Text,
@@ -32,6 +34,7 @@ export default class SolveContinueScreen extends Component {
         super();
 
         this.state = {
+            title: "",
             input: "",
             email: "",
             displayName: "",
@@ -48,8 +51,10 @@ export default class SolveContinueScreen extends Component {
     }
 
     componentDidMount() {
-        let { input, email, displayName, photoURL } = this.props.route.params;
+        let { title, input, email, displayName, photoURL, category } = this.props.route.params;
         this.setState({
+            category,
+            title,
             input,
             email,
             displayName,
@@ -58,12 +63,12 @@ export default class SolveContinueScreen extends Component {
     }
 
     sendMessage() {
-        let { input, anonymous, category } = this.state;
+        let { title, input, anonymous, category } = this.state;
         this.setState({
             sending: true,
             overlay: true,
         });
-        authStore.submitUserIntent(input, category, anonymous).then(() => {
+        authStore.submitUserIntent(title, input, category, anonymous).then(() => {
             setTimeout(() => {
                 this.setState({
                     sending: false,
@@ -85,8 +90,10 @@ export default class SolveContinueScreen extends Component {
         }
         
         this.setState({
+            title: "",
             input: "",
             email: "",
+            category: "SolveIntent",
             displayName: "",
             photoURL: "",
             anonymous: false,
@@ -95,13 +102,20 @@ export default class SolveContinueScreen extends Component {
             error: false,
         });
 
-        this.props.navigation.popToTop();
+        this.props.navigation.navigate("NavigateStack");
+
+        // this.props.navigation.popToTop();
+        // setTimeout(() => {
+        //     const backAction = NavigationActions.back({
+        //         key: 'SolveStack',
+        //       });
+        //       this.props.navigation.dispatch(backAction);
+        // }, 100)
     }
 
     render() {
         return (
             <SafeAreaView style={styles.container}>
-                <View style={{ flex: 1}}></View>
                 <View style={styles.imageContainer}>
                     {this.state.photoURL == "" ? 
                         null :
@@ -156,30 +170,55 @@ export default class SolveContinueScreen extends Component {
                     </Text>
                     <Input
                         textAlignVertical="top"
-                        returnKeyType="done"
-                        blurOnSubmit={true}
-                        autoFocus
-                        keyboardType="ascii-capable"
-                        labelStyle={{
-                            color: Colors.dark,
-                            fontFamily: Fonts.standardFont,
-                            fontSize: Fonts.standardSize,
-                        }}
-                        label="Message"
-                        placeholder="Tell us what's going on!"
-                        multiline={true}
-                        inputStyle={styles.input}
+                        inputStyle={[styles.title, {
+                            color: this.state.anonymous ? "white" : Colors.dark
+                        } ]}
                         inputContainerStyle={{
                             borderBottomWidth: 0, 
                             padding: 5
                         }}
+                        inputContainerStyle={[styles.inputContainerStyle, {
+                            backgroundColor: this.state.anonymous ? Colors.dark : Colors.lightBrown
+                        } ]}
+                        leftIcon={
+                            <Icon
+                                name={this.state.category == "SolveIntent" ? "account-search" : "report"}
+                                type={this.state.category == "SolveIntent" ? "material-community" : "material"}
+                                color={this.state.anonymous ? "white" : Colors.dark}
+                                size={16}
+                            />
+                        }
+                        value={this.state.title}
+                        editable={false}
+                        dataDetectorTypes="all"
+                    />
+                    <Input
+                        textAlignVertical="top"
+                        multiline={true}
+                        inputStyle={[styles.input, {
+                            color: this.state.anonymous ? "white" : Colors.dark
+                        } ]}
+                        inputContainerStyle={{
+                            borderBottomWidth: 0, 
+                            padding: 5
+                        }}
+                        inputContainerStyle={[styles.inputContainerStyle, {
+                            backgroundColor: this.state.anonymous ? Colors.dark : Colors.lightBrown
+                        } ]}
                         maxLength={1000}
-                        // leftIcon={
-                        //     <Icon
-                        //         name="typewriter"
-                        //         type="material-community"
-                        //     />
-                        // }
+                        leftIcon={
+                            <Icon
+                                name="text-subject"
+                                type="material-community"
+                                color={this.state.anonymous ? "white" : Colors.dark}
+                                size={16}
+                            />
+                        }
+                        leftIconContainerStyle={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "flex-start"
+                        }}
                         value={this.state.input}
                         editable={false}
                         dataDetectorTypes="all"
@@ -211,6 +250,7 @@ export default class SolveContinueScreen extends Component {
                         }}
                     />
                 <View style={{ flex: 1 }}></View>
+                <View style={{ flex:1 }}></View>
                 <Overlay 
                     animationType="slide"
                     backdropStyle={{ 
@@ -290,7 +330,7 @@ export default class SolveContinueScreen extends Component {
 let { width, height } = Dimensions.get("window");
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: Colors.darkCream,
+        backgroundColor: Colors.cream,
         width,
         height,
         display: "flex",
@@ -312,9 +352,20 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "flex-start",
     },
+    inputContainerStyle: {
+        backgroundColor: Colors.lightBrown,
+        borderRadius: 10,
+        borderBottomWidth: 0,
+        padding: 5
+    },
+    title: {
+        fontFamily: Fonts.headerFont,
+        fontSize: Fonts.standardSize,
+        color: Colors.darkBlue,
+    },
     input: {
         fontFamily: Fonts.standardFont,
-        fontSize: Fonts.headerSize,
+        fontSize: Fonts.standardSize,
         color: Colors.darkBlue,
     },
     buttonContainer: {
@@ -338,7 +389,8 @@ const styles = StyleSheet.create({
     email: {
         color: Colors.darkYellow,
         fontFamily: Fonts.standardFont,
-        fontSize: Fonts.standardSize
+        fontSize: Fonts.standardSize,
+        padding: 5,
     },
     overlay: {
         backgroundColor: "white",
